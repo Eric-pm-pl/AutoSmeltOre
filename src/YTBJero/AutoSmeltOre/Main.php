@@ -42,19 +42,19 @@ class Main extends PluginBase implements Listener{
         $item = $event->getItem();
         $block = $event->getBlock();
         $player = $event->getPlayer();
+
         if($item->hasEnchantment(VanillaEnchantments::SILK_TOUCH())){
             return;
         }
-        if (!$player->hasPermission("autosmeltore.action.allow")) return;
-        if ($this->getConfig()->get("permission", true)) {
 
-            if($this->getConfig()->get(str_replace(" ", "_", $block->getName()), true)){
-                $drops = [];
-                foreach ($block->getDrops($item) as $drop) {
-                    $drops[] = $this->ores[$block->getName()] ?? $drop;
-                }
-                $event->setDrops($drops);
+        if (!$player->hasPermission("autosmeltore.action.allow") && $this->getConfig()->get("permission") === true) return;
+
+        if($this->getConfig()->get(str_replace(" ", "_", $block->getName()), true)){
+            $drops = [];
+            foreach ($block->getDrops($item) as $drop) {
+                $drops[] = $this->ores[$block->getName()] ?? $drop;
             }
+            $event->setDrops($drops);
         }
     }
 }
